@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Bus</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Edit Bus {{ bus[1] }}</h1>
+        <form action="{{ url_for('edit_bus', bus_id=bus[0]) }}" method="POST">
+            <label for="bus_number">Bus Number:</label>
+            <input type="text" id="bus_number" name="bus_number" value="{{ bus[1] }}" required>
+            
+            <label for="route">Route:</label>
+            <input type="text" id="route" name="route" value="{{ bus[2] }}" required>
+            
+            <label for="total_seats">Total Seats:</label>
+            <input type="number" id="total_seats" name="total_seats" value="{{ bus[3] }}" required>
+            
+            <label for="available_seats">Available Seats:</label>
+            <input type="number" id="available_seats" name="available_seats" value="{{ bus[4] }}" required>
+            
+            <label for="time">Time:</label>
+            <input type="text" id="time" name="time" value="{{ bus[5] }}" required>
+            
+            <button type="submit">Update Bus</button>
+        </form>
+        <form action="{{ url_for('delete_bus', bus_id=bus[0]) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this bus?');">
+            <button type="submit" class="button delete-button">Delete Bus</button>
+        </form>
+        <a href="{{ url_for('view_buses_route') }}">Back to View Buses</a>
+    </div>
+</body>
+</html>

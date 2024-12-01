@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Edit Profile</h1>
+    <form action="{{ url_for('profile') }}" method="POST">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" value="{{ user[1] }}" required>
+        
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" value="{{ user[3] }}">
+        
+        <label for="phone_number">Phone Number:</label>
+        <input type="text" id="phone_number" name="phone_number" value="{{ user[4] }}">
+        
+        <label for="gender">Gender:</label>
+        <select id="gender" name="gender">
+            <option value="male" {% if user[5] == 'male' %}selected{% endif %}>Male</option>
+            <option value="female" {% if user[5] == 'female' %}selected{% endif %}>Female</option>
+        </select>
+        
+        <button type="submit">Save</button>
+    </form>
+    <a href="{{ url_for('home') }}">Back to Home</a>
+</div>
+{% endblock %}

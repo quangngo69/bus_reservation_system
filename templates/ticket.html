@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ticket</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Ticket for Bus {{ bus[1] }}</h1>
+    <p>Customer Name: {{ customer_name }}</p>
+    <p>Seats Reserved: {{ seats_reserved }}</p>
+    <img src="{{ url_for('static', filename='ticket_qr.png') }}" alt="QR Code">
+    <a href="{{ url_for('view_buses_route') }}">Back to View Buses</a>
+</body>
+</html>
