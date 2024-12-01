@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make a Reservation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Reverse Seats</h1>
+    <form action="" method="POST" id="reverseSeatsForm">
+        <label for="bus_id_reverse">Select Bus to Reverse Seats:</label>
+        <select name="bus_id_reverse" id="bus_id_reverse" onchange="updateReverseSeatsForm()">
+            {% for bus in buses %}
+                <option value="{{ bus[0] }}">{{ bus[1] }} - {{ bus[2] }} ({{ bus[3] }} seats available)</option>
+            {% endfor %}
+        </select>
+        
+        <label for="seats_to_reverse">Seats to Reverse:</label>
+        <input type="number" name="seats_to_reverse" id="seats_to_reverse" value="1" min="1" max="10">
+        <button type="submit" onclick="submitReverseSeats()">Reverse Seats</button>
+    </form>
+
+    <a href="{{ url_for('view_buses_route') }}">View Available Buses</a>
+
+    <script>
+        function updateReverseSeatsForm() {
+            const busSelect = document.getElementById('bus_id_reverse');
+            const busId = busSelect.value;
+            const seatsInput = document.getElementById('seats_to_reverse');
+
+            // Update the form action dynamically based on the selected bus
+            document.getElementById('reverseSeatsForm').action = `/reverse_seats/${busId}/${seatsInput.value}`;
+        }
+
+        function submitReverseSeats() {
+            const seatsInput = document.getElementById('seats_to_reverse');
+            const busSelect = document.getElementById('bus_id_reverse');
+            const busId = busSelect.value;
+
+            // Ensure the action is set correctly before submitting
+            document.getElementById('reverseSeatsForm').action = `/reverse_seats/${busId}/${seatsInput.value}`;
+        }
+    </script>
+</body>
+</html>

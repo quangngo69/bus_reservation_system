@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Welcome to the Home Page!</h1>
+    <div class="button-container">
+        <a href="{{ url_for('view_buses_route') }}" class="button">View Buses</a>
+        <a href="{{ url_for('make_reservation_route') }}" class="button" >Make a Reservation</a>
+        <a href="{{ url_for('view_reservations_route') }}" class="button">View Reservations</a>
+        <a href="{{ url_for('logout') }}" class="button">Logout</a>
+    </div>
+</body>
+</html>

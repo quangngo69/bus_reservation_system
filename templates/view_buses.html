@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Buses</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Available Buses</h1>
+    <table>
+        <tr>
+            <th>Bus ID</th>
+            <th>Bus Number</th>
+            <th>Route</th>
+            <th>Total Seats</th>
+            <th>Available Seats</th>
+        </tr>
+        {% for bus in buses %}
+        <tr>
+            <td>{{ bus[0] }}</td>
+            <td>{{ bus[1] }}</td>
+            <td>{{ bus[2] }}</td>
+            <td>{{ bus[3] }}</td>
+            <td>{{ bus[4] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="{{ url_for('index') }}">Back to Home</a>
+</body>
+</html>
