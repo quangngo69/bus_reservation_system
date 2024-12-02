@@ -27,7 +27,13 @@
                 <td>{{ reservation[3] }}</td>
                 <td>{{ reservation[4] }}</td>
                 <td>{{ reservation[5] }}</td>
-                <td>${{ reservation[4] * reservation[6] }}</td> <!-- Calculate total price -->
+                <td>
+                    {% if reservation[7] == 'block' %}
+                        $150
+                    {% else %}
+                        ${{ reservation[4] * reservation[6] }}
+                    {% endif %}
+                </td>
                 <td>
                     <img src="{{ url_for('generate_qr_code', bus_id=reservation[0], customer_name=reservation[3], seats_reserved=reservation[4]) }}" alt="QR Code" width="100" height="100">
                 </td>

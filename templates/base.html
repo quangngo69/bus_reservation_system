@@ -6,18 +6,37 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <div class="container">
-        {% if user %}
-            <div class="header">
-                <div class="welcome-message">
+    <div class="header">
+        <a href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo">
+        </a>
+        <div class="header-content">
+            <div class="welcome-message">
+                {% if user %}
                     <p>Welcome {{ user[1] }}!</p>
-                </div>
-                <a href="{{ url_for('logout') }}" class="button">Logout</a>
+                    <p>Balance: ${{ balance }}</p>
+                {% else %}
+                    <p><strong>Welcome to the Bus Reservation System</strong></p>
+                {% endif %}
             </div>
-        {% endif %}
-        <div class="content">
-            {% block content %}{% endblock %}
+            <div class="button-container">
+                <a href="{{ url_for('view_buses_route') }}" class="button">View Buses</a>
+                {% if user and user[1] == 'admin' %}
+                <a href="{{ url_for('add_bus_route') }}" class="button">Add Bus</a>
+                <a href="{{ url_for('manage_accounts') }}" class="button">Manage Accounts</a>
+                {% endif %}
+                <a href="{{ url_for('my_tickets') }}" class="button">My Tickets</a>
+                <a href="{{ url_for('profile') }}" class="button">Profile</a>
+                {% if user %}
+                    <a href="{{ url_for('logout') }}" class="button">Logout</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="button">Login</a>
+                {% endif %}
+            </div>
         </div>
+    </div>
+    <div class="content">
+        {% block content %}{% endblock %}
     </div>
 </body>
 </html>

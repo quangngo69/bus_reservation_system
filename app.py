@@ -55,7 +55,8 @@ def view_buses_route():
         return redirect(url_for('login'))
     user = get_user_by_id(user_id)
     buses = view_buses()
-    return render_template('view_buses.html', buses=buses, user=user)
+    balance = user[6]
+    return render_template('view_buses.html', buses=buses, user=user, balance=balance)
 
 # Route for viewing reservations
 @app.route('/view_reservations')
@@ -169,16 +170,21 @@ def buy_ticket(bus_id):
     if request.method == 'POST':
         customer_name = request.form['customer_name']
         seats_reserved = int(request.form['seats_reserved'])
-        total_price = seats_reserved * bus[6]  # Assuming the price is the seventh field in the bus tuple
+        plan = request.form['plan']
+        
+        if plan == 'block':
+            total_price = 150  # Price for 1 block (~60 tickets)
+        else:
+            total_price = seats_reserved * bus[6]  # Price for one-time tickets
         
         if user[6] < total_price:  # Assuming the balance is the seventh field in the user tuple
             flash('Not enough balance to buy the ticket!')
             return redirect(url_for('buy_ticket', bus_id=bus_id))
         
-        if make_reservation(bus_id, customer_name, seats_reserved):
+        if make_reservation(bus_id, customer_name, seats_reserved, plan):
             update_balance(user_id, -total_price)
             # Generate QR code
-            qr_data = f"Bus ID: {bus_id}, Customer: {customer_name}, Seats: {seats_reserved}"
+            qr_data = f"Bus ID: {bus_id}, Customer: {customer_name}, Seats: {seats_reserved}, Plan: {plan}"
             qr = qrcode.make(qr_data)
             buffer = BytesIO()
             qr.save(buffer, 'PNG')
