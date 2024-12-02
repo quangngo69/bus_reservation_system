@@ -28,13 +28,25 @@ def index():
 # Route for adding a bus
 @app.route('/add_bus', methods=['GET', 'POST'])
 def add_bus_route():
+    user_id = session.get('user_id')
+    if not user_id:
+        flash('You need to log in to add a bus.')
+        return redirect(url_for('login'))
+    
+    user = get_user_by_id(user_id)
+    if user is None or user[1] != 'admin':
+        flash('You do not have permission to add a bus.')
+        return redirect(url_for('home'))
+    
     if request.method == 'POST':
         bus_number = request.form['bus_number']
         route = request.form['route']
         total_seats = request.form['total_seats']
-        add_bus(bus_number, route, total_seats)
+        time = request.form['time']
+        price = request.form['price']
+        add_bus(bus_number, route, total_seats, time, price)
         return redirect(url_for('view_buses_route'))
-    return render_template('add_bus.html')
+    return render_template('add_bus.html', user=user)
 
 # Route for viewing buses
 @app.route('/view_buses')
@@ -45,22 +57,6 @@ def view_buses_route():
         user = get_user_by_id(user_id)
     buses = view_buses()
     return render_template('view_buses.html', buses=buses, user=user)
-
-# Route for making a reservation
-@app.route('/make_reservation', methods=['GET', 'POST'])
-def make_reservation_route():
-    user_id = session.get('user_id')
-    user = None
-    if user_id:
-        user = get_user_by_id(user_id)
-    if request.method == 'POST':
-        bus_id = request.form['bus_id']
-        customer_name = request.form['customer_name']
-        seats_reserved = request.form['seats_reserved']
-        make_reservation(bus_id, customer_name, seats_reserved)
-        return redirect(url_for('view_reservations'))
-    buses = view_buses()
-    return render_template('make_reservation.html', buses=buses, user=user)
 
 # Route for viewing reservations
 @app.route('/view_reservations')
@@ -151,12 +147,32 @@ def logout():
 # Route for buying a ticket
 @app.route('/buy_ticket/<int:bus_id>', methods=['GET', 'POST'])
 def buy_ticket(bus_id):
+    user_id = session.get('user_id')
+    if not user_id:
+        flash('You need to log in to buy a ticket.')
+        return redirect(url_for('login'))
+    
+    user = get_user_by_id(user_id)
+    if user is None:
+        flash('User not found.')
+        return redirect(url_for('login'))
+    
+    bus = get_bus(bus_id)
+    if bus is None:
+        flash('Bus not found.')
+        return redirect(url_for('view_buses_route'))
+    
     if request.method == 'POST':
         customer_name = request.form['customer_name']
         seats_reserved = int(request.form['seats_reserved'])
+        total_price = seats_reserved * bus[6]  # Assuming the price is the seventh field in the bus tuple
         
-        # Make reservation and update available seats
+        if user[6] < total_price:  # Assuming the balance is the seventh field in the user tuple
+            flash('Not enough balance to buy the ticket!')
+            return redirect(url_for('buy_ticket', bus_id=bus_id))
+        
         if make_reservation(bus_id, customer_name, seats_reserved):
+            update_balance(user_id, -total_price)
             # Generate QR code
             qr_data = f"Bus ID: {bus_id}, Customer: {customer_name}, Seats: {seats_reserved}"
             qr = qrcode.make(qr_data)
@@ -169,12 +185,7 @@ def buy_ticket(bus_id):
             flash('Not enough available seats!')
             return redirect(url_for('buy_ticket', bus_id=bus_id))
     
-    bus = get_bus(bus_id)
-    if bus is None:
-        flash('Bus not found.')
-        return redirect(url_for('view_buses_route'))
-    
-    return render_template('buy_ticket.html', bus=bus)
+    return render_template('buy_ticket.html', bus=bus, user=user)
 
 @app.route('/generate_qr_code/<int:bus_id>/<customer_name>/<int:seats_reserved>')
 def generate_qr_code(bus_id, customer_name, seats_reserved):
@@ -194,8 +205,14 @@ def my_tickets():
         return redirect(url_for('login'))
     
     user = get_user_by_id(user_id)
-    tickets = view_user_tickets(user_id)
-    return render_template('my_tickets.html', tickets=tickets, user=user)
+    if user is None:
+        flash('User not found.')
+        return redirect(url_for('login'))
+    
+    is_admin = user[1] == 'admin'
+    
+    reservations = view_reservations(user_id, is_admin)
+    return render_template('my_tickets.html', reservations=reservations, is_admin=is_admin, user=user)
 
 @app.route('/edit_bus/<int:bus_id>', methods=['GET', 'POST'])
 def edit_bus(bus_id):
@@ -205,11 +222,7 @@ def edit_bus(bus_id):
         return redirect(url_for('login'))
     
     user = get_user_by_id(user_id)
-    if user is None:
-        flash('User not found.')
-        return redirect(url_for('login'))
-    
-    if user[1] != 'admin':
+    if user is None or user[1] != 'admin':
         flash('You do not have permission to edit buses.')
         return redirect(url_for('home'))
     
@@ -224,12 +237,13 @@ def edit_bus(bus_id):
         total_seats = int(request.form['total_seats'])
         available_seats = int(request.form['available_seats'])
         time = request.form['time']
+        price = request.form['price']
         
-        update_bus(bus_id, bus_number, route, total_seats, available_seats, time)
+        update_bus(bus_id, bus_number, route, total_seats, available_seats, time, price)
         flash('Bus details updated successfully!')
         return redirect(url_for('view_buses_route'))
     
-    return render_template('edit_bus.html', bus=bus)
+    return render_template('edit_bus.html', bus=bus, user=user)
 
 @app.route('/delete_bus/<int:bus_id>', methods=['POST'])
 def delete_bus(bus_id):
@@ -268,7 +282,8 @@ def profile():
         email = request.form['email']
         phone_number = request.form['phone_number']
         gender = request.form['gender']
-        update_user(user_id, username, email, phone_number, gender)
+        name = request.form['name']
+        update_user(user_id, username, email, phone_number, gender, name)
         flash('Profile updated successfully!')
         return redirect(url_for('profile'))
     

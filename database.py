@@ -14,7 +14,8 @@ def setup_database():
             email TEXT,
             phone_number TEXT,
             gender TEXT,
-            balance REAL DEFAULT 0.0
+            balance REAL DEFAULT 0.0,
+            name TEXT
         )
     ''')
     
@@ -51,6 +52,8 @@ def setup_database():
         cursor.execute("ALTER TABLE users ADD COLUMN gender TEXT")
     if 'balance' not in columns:
         cursor.execute("ALTER TABLE users ADD COLUMN balance REAL DEFAULT 0.0")
+    if 'name' not in columns:
+        cursor.execute("ALTER TABLE users ADD COLUMN name TEXT")
     
     # Add new columns to the buses table if they don't exist
     cursor.execute("PRAGMA table_info(buses)")
@@ -58,6 +61,8 @@ def setup_database():
     
     if 'time' not in columns:
         cursor.execute("ALTER TABLE buses ADD COLUMN time TEXT")
+    if 'price' not in columns:
+        cursor.execute("ALTER TABLE buses ADD COLUMN price REAL DEFAULT 0.0")
     
     conn.commit()
     conn.close()
@@ -99,26 +104,26 @@ def get_user_by_id(user_id):
 def check_password(stored_password_hash, password):
     return check_password_hash(stored_password_hash, password)
 
-def update_user(user_id, username, email, phone_number, gender):
+def update_user(user_id, username, email, phone_number, gender, name):
     conn = sqlite3.connect('bus_reservation.db')
     cursor = conn.cursor()
     
     cursor.execute('''
         UPDATE users
-        SET username = ?, email = ?, phone_number = ?, gender = ?
+        SET username = ?, email = ?, phone_number = ?, gender = ?, name = ?
         WHERE id = ?
-    ''', (username, email, phone_number, gender, user_id))
+    ''', (username, email, phone_number, gender, name, user_id))
     
     conn.commit()
     conn.close()
 
-def add_bus(bus_number, route, total_seats, time):
+def add_bus(bus_number, route, total_seats, time, price):
     conn = sqlite3.connect('bus_reservation.db')
     cursor = conn.cursor()
     cursor.execute('''
-        INSERT INTO buses (bus_number, route, total_seats, available_seats, time)
-        VALUES (?, ?, ?, ?, ?)
-    ''', (bus_number, route, total_seats, total_seats, time))
+        INSERT INTO buses (bus_number, route, total_seats, available_seats, time, price)
+        VALUES (?, ?, ?, ?, ?, ?)
+    ''', (bus_number, route, total_seats, total_seats, time, price))
     conn.commit()
     conn.close()
 
@@ -163,13 +168,13 @@ def view_reservations(user_id, is_admin):
     
     if is_admin:
         cursor.execute('''
-            SELECT reservations.id, buses.bus_number, buses.route, reservations.customer_name, reservations.seats_reserved, buses.time
+            SELECT reservations.id, buses.bus_number, buses.route, reservations.customer_name, reservations.seats_reserved, buses.time, buses.price
             FROM reservations
             JOIN buses ON reservations.bus_id = buses.id
         ''')
     else:
         cursor.execute('''
-            SELECT reservations.id, buses.bus_number, buses.route, reservations.customer_name, reservations.seats_reserved, buses.time
+            SELECT reservations.id, buses.bus_number, buses.route, reservations.customer_name, reservations.seats_reserved, buses.time, buses.price
             FROM reservations
             JOIN buses ON reservations.bus_id = buses.id
             WHERE reservations.customer_name = (SELECT username FROM users WHERE id = ?)
@@ -225,15 +230,15 @@ def view_user_tickets(user_id):
     conn.close()
     return tickets
 
-def update_bus(bus_id, bus_number, route, total_seats, available_seats, time):
+def update_bus(bus_id, bus_number, route, total_seats, available_seats, time, price):
     conn = sqlite3.connect('bus_reservation.db')
     cursor = conn.cursor()
     
     cursor.execute('''
         UPDATE buses
-        SET bus_number = ?, route = ?, total_seats = ?, available_seats = ?, time = ?
+        SET bus_number = ?, route = ?, total_seats = ?, available_seats = ?, time = ?, price = ?
         WHERE id = ?
-    ''', (bus_number, route, total_seats, available_seats, time, bus_id))
+    ''', (bus_number, route, total_seats, available_seats, time, price, bus_id))
     
     conn.commit()
     conn.close()

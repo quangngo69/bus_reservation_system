@@ -21,6 +21,9 @@
             <option value="female" {% if user[5] == 'female' %}selected{% endif %}>Female</option>
         </select>
         
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" value="{{ user[7] }}">
+        
         <button type="submit">Save</button>
     </form>
     <a href="{{ url_for('home') }}">Back to Home</a>

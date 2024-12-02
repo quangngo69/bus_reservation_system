@@ -8,9 +8,10 @@
 <body>
     <div class="container">
         <h1>Buy Ticket for Bus {{ bus[1] }}</h1>
+        <p>Price per seat: ${{ bus[6] }}</p> <!-- Display the price per seat -->
         <form action="{{ url_for('buy_ticket', bus_id=bus[0]) }}" method="POST">
             <label for="customer_name">Customer Name:</label>
-            <input type="text" id="customer_name" name="customer_name" required>
+            <input type="text" id="customer_name" name="customer_name" value="{{ user[7] }}" required>
             
             <label for="seats_reserved">Seats Reserved:</label>
             <input type="number" id="seats_reserved" name="seats_reserved" required>

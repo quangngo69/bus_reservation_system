@@ -14,6 +14,7 @@
                 <th>Total Seats</th>
                 <th>Available Seats</th>
                 <th>Time</th>
+                <th>Price</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -26,6 +27,7 @@
                 <td>{{ bus[3] }}</td>
                 <td>{{ bus[4] }}</td>
                 <td>{{ bus[5] }}</td>
+                <td>${{ bus[6] }}</td>
                 <td>
                     <a href="{{ url_for('buy_ticket', bus_id=bus[0]) }}" class="button">Buy Ticket</a>
                     {% if user[1] == 'admin' %}

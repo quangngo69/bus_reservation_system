@@ -10,9 +10,9 @@
         <div class="button-container">
             <a href="{{ url_for('view_buses_route') }}" class="button">View Buses</a>
             {% if user[1] == 'admin' %}
-            <a href="{{ url_for('make_reservation_route') }}" class="button">Make a Reservation</a>
+            <a href="{{ url_for('add_bus_route') }}" class="button">Add Bus</a>
+            <a href="{{ url_for('manage_accounts') }}" class="button">Manage Accounts</a>
             {% endif %}
-            <a href="{{ url_for('view_reservations_route') }}" class="button">View Reservations</a>
             <a href="{{ url_for('my_tickets') }}" class="button">My Tickets</a>
             <a href="{{ url_for('profile') }}" class="button">Profile</a>
             <a href="{{ url_for('logout') }}" class="button">Logout</a>
