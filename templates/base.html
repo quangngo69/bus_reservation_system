@@ -12,6 +12,7 @@
                 <div class="welcome-message">
                     <p>Welcome {{ user[1] }}!</p>
                 </div>
+                <a href="{{ url_for('logout') }}" class="button">Logout</a>
             </div>
         {% endif %}
         <div class="content">

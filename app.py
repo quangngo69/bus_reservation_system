@@ -32,12 +32,10 @@ def add_bus_route():
     if not user_id:
         flash('You need to log in to add a bus.')
         return redirect(url_for('login'))
-    
     user = get_user_by_id(user_id)
     if user is None or user[1] != 'admin':
         flash('You do not have permission to add a bus.')
         return redirect(url_for('home'))
-    
     if request.method == 'POST':
         bus_number = request.form['bus_number']
         route = request.form['route']
@@ -52,9 +50,10 @@ def add_bus_route():
 @app.route('/view_buses')
 def view_buses_route():
     user_id = session.get('user_id')
-    user = None
-    if user_id:
-        user = get_user_by_id(user_id)
+    if not user_id:
+        flash('You need to log in to view buses.')
+        return redirect(url_for('login'))
+    user = get_user_by_id(user_id)
     buses = view_buses()
     return render_template('view_buses.html', buses=buses, user=user)
 
@@ -79,6 +78,11 @@ def view_reservations_route():
 # Route for reversing seats
 @app.route('/reverse_seats/<int:bus_id>/<int:seats_to_reverse>')
 def reverse_seats_route(bus_id, seats_to_reverse):
+    user_id = session.get('user_id')
+    if not user_id:
+        flash('You need to log in to reverse seats.')
+        return redirect(url_for('login'))
+    
     reverse_seats(bus_id, seats_to_reverse)
     return redirect(url_for('view_buses_route'))
 
@@ -142,7 +146,7 @@ def home():
 def logout():
     session.pop('user_id', None)  # Remove user ID from session
     flash('You have been logged out.')
-    return redirect(url_for('login'))
+    return render_template('index.html')
 
 # Route for buying a ticket
 @app.route('/buy_ticket/<int:bus_id>', methods=['GET', 'POST'])
@@ -203,14 +207,11 @@ def my_tickets():
     if not user_id:
         flash('You need to log in to view your tickets.')
         return redirect(url_for('login'))
-    
     user = get_user_by_id(user_id)
     if user is None:
         flash('User not found.')
         return redirect(url_for('login'))
-    
     is_admin = user[1] == 'admin'
-    
     reservations = view_reservations(user_id, is_admin)
     return render_template('my_tickets.html', reservations=reservations, is_admin=is_admin, user=user)
 
@@ -271,12 +272,10 @@ def profile():
     if not user_id:
         flash('You need to log in to view your profile.')
         return redirect(url_for('login'))
-    
     user = get_user_by_id(user_id)
     if user is None:
         flash('User not found.')
         return redirect(url_for('login'))
-    
     if request.method == 'POST':
         username = request.form['username']
         email = request.form['email']
@@ -286,7 +285,6 @@ def profile():
         update_user(user_id, username, email, phone_number, gender, name)
         flash('Profile updated successfully!')
         return redirect(url_for('profile'))
-    
     return render_template('profile.html', user=user)
 
 @app.route('/manage_accounts', methods=['GET', 'POST'])
@@ -295,12 +293,10 @@ def manage_accounts():
     if not user_id:
         flash('You need to log in to manage accounts.')
         return redirect(url_for('login'))
-    
     user = get_user_by_id(user_id)
     if user is None or user[1] != 'admin':
         flash('You do not have permission to manage accounts.')
         return redirect(url_for('home'))
-    
     if request.method == 'POST':
         action = request.form['action']
         target_user_id = int(request.form['user_id'])
@@ -312,7 +308,6 @@ def manage_accounts():
             update_password(target_user_id, new_password)
         flash('Account updated successfully!')
         return redirect(url_for('manage_accounts'))
-    
     users = get_all_users()
     return render_template('manage_accounts.html', users=users)
 
