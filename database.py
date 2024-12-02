@@ -13,7 +13,8 @@ def setup_database():
             password_hash TEXT NOT NULL,
             email TEXT,
             phone_number TEXT,
-            gender TEXT
+            gender TEXT,
+            balance REAL DEFAULT 0.0
         )
     ''')
     
@@ -48,6 +49,8 @@ def setup_database():
         cursor.execute("ALTER TABLE users ADD COLUMN phone_number TEXT")
     if 'gender' not in columns:
         cursor.execute("ALTER TABLE users ADD COLUMN gender TEXT")
+    if 'balance' not in columns:
+        cursor.execute("ALTER TABLE users ADD COLUMN balance REAL DEFAULT 0.0")
     
     # Add new columns to the buses table if they don't exist
     cursor.execute("PRAGMA table_info(buses)")
@@ -240,6 +243,44 @@ def delete_bus_from_db(bus_id):
     cursor = conn.cursor()
     
     cursor.execute('DELETE FROM buses WHERE id = ?', (bus_id,))
+    
+    conn.commit()
+    conn.close()
+
+def update_balance(user_id, amount):
+    conn = sqlite3.connect('bus_reservation.db')
+    cursor = conn.cursor()
+    
+    cursor.execute('''
+        UPDATE users
+        SET balance = balance + ?
+        WHERE id = ?
+    ''', (amount, user_id))
+    
+    conn.commit()
+    conn.close()
+
+def get_all_users():
+    conn = sqlite3.connect('bus_reservation.db')
+    cursor = conn.cursor()
+    
+    cursor.execute('SELECT id, username, phone_number, balance FROM users')
+    users = cursor.fetchall()
+    
+    conn.close()
+    return users
+
+def update_password(user_id, new_password):
+    conn = sqlite3.connect('bus_reservation.db')
+    cursor = conn.cursor()
+    
+    password_hash = generate_password_hash(new_password)
+    
+    cursor.execute('''
+        UPDATE users
+        SET password_hash = ?
+        WHERE id = ?
+    ''', (password_hash, user_id))
     
     conn.commit()
     conn.close()

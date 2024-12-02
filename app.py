@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
-from database import setup_database, add_user, get_user_by_username, get_user_by_id, check_password, update_user, add_bus, view_buses, make_reservation, view_reservations, reverse_seats, get_bus, view_user_tickets, update_bus, delete_bus_from_db
+from database import get_all_users,update_password,update_balance,setup_database, add_user, get_user_by_username, get_user_by_id, check_password, update_user, add_bus, view_buses, make_reservation, view_reservations, reverse_seats, get_bus, view_user_tickets, update_bus, delete_bus_from_db
 from werkzeug.security import generate_password_hash, check_password_hash
 from io import BytesIO
 from flask import send_file
@@ -138,7 +138,8 @@ def home():
         return redirect(url_for('login'))
     
     username = user[1]  # Assuming the username is the second field in the user tuple
-    return render_template('home.html', username=username, user=user)
+    balance = user[6]  # Assuming the balance is the seventh field in the user tuple
+    return render_template('home.html', username=username, balance=balance, user=user)
 
 # Route to log out
 @app.route('/logout')
@@ -272,6 +273,33 @@ def profile():
         return redirect(url_for('profile'))
     
     return render_template('profile.html', user=user)
+
+@app.route('/manage_accounts', methods=['GET', 'POST'])
+def manage_accounts():
+    user_id = session.get('user_id')
+    if not user_id:
+        flash('You need to log in to manage accounts.')
+        return redirect(url_for('login'))
+    
+    user = get_user_by_id(user_id)
+    if user is None or user[1] != 'admin':
+        flash('You do not have permission to manage accounts.')
+        return redirect(url_for('home'))
+    
+    if request.method == 'POST':
+        action = request.form['action']
+        target_user_id = int(request.form['user_id'])
+        if action == 'update_balance':
+            amount = float(request.form['amount'])
+            update_balance(target_user_id, amount)
+        elif action == 'update_password':
+            new_password = request.form['new_password']
+            update_password(target_user_id, new_password)
+        flash('Account updated successfully!')
+        return redirect(url_for('manage_accounts'))
+    
+    users = get_all_users()
+    return render_template('manage_accounts.html', users=users)
 
 if __name__ == '__main__':
     with app.app_context():
