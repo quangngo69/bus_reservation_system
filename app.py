@@ -23,7 +23,8 @@ def index():
     user = None
     if user_id:
         user = get_user_by_id(user_id)
-    return render_template('index.html', user=user)
+        balance = user[6]
+    return render_template('index.html', user=user, balance=balance)
 
 # Route for adding a bus
 @app.route('/add_bus', methods=['GET', 'POST'])
@@ -182,7 +183,7 @@ def buy_ticket(bus_id):
             return redirect(url_for('buy_ticket', bus_id=bus_id))
         
         if make_reservation(bus_id, customer_name, seats_reserved, plan):
-            update_balance(user_id, -total_price)
+            update_balance(user_id, -total_price)  # Reduce the user's balance
             # Generate QR code
             qr_data = f"Bus ID: {bus_id}, Customer: {customer_name}, Seats: {seats_reserved}, Plan: {plan}"
             qr = qrcode.make(qr_data)

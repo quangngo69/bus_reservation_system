@@ -26,7 +26,8 @@ def setup_database():
             route TEXT NOT NULL,
             total_seats INTEGER NOT NULL,
             available_seats INTEGER NOT NULL,
-            time TEXT
+            time TEXT,
+            price REAL NOT NULL
         )
     ''')
     
@@ -36,6 +37,7 @@ def setup_database():
             bus_id INTEGER,
             customer_name TEXT NOT NULL,
             seats_reserved INTEGER NOT NULL,
+            plan TEXT NOT NULL,
             FOREIGN KEY (bus_id) REFERENCES buses (id)
         )
     ''')
@@ -62,7 +64,16 @@ def setup_database():
     if 'time' not in columns:
         cursor.execute("ALTER TABLE buses ADD COLUMN time TEXT")
     if 'price' not in columns:
-        cursor.execute("ALTER TABLE buses ADD COLUMN price REAL DEFAULT 0.0")
+        cursor.execute("ALTER TABLE buses ADD COLUMN price REAL NOT NULL")
+    if 'available_seats' not in columns:
+        cursor.execute("ALTER TABLE buses ADD COLUMN available_seats INTEGER NOT NULL")
+    
+    # Add new columns to the reservations table if they don't exist
+    cursor.execute("PRAGMA table_info(reservations)")
+    columns = [column[1] for column in cursor.fetchall()]
+    
+    if 'plan' not in columns:
+        cursor.execute("ALTER TABLE reservations ADD COLUMN plan TEXT NOT NULL DEFAULT 'one_time'")
     
     conn.commit()
     conn.close()
@@ -137,7 +148,7 @@ def view_buses():
     conn.close()
     return buses
 
-def make_reservation(bus_id, customer_name, seats_reserved):
+def make_reservation(bus_id, customer_name, seats_reserved, plan):
     conn = sqlite3.connect('bus_reservation.db')
     cursor = conn.cursor()
     
@@ -146,9 +157,9 @@ def make_reservation(bus_id, customer_name, seats_reserved):
     
     if available_seats >= seats_reserved:
         cursor.execute('''
-            INSERT INTO reservations (bus_id, customer_name, seats_reserved)
-            VALUES (?, ?, ?)
-        ''', (bus_id, customer_name, seats_reserved))
+            INSERT INTO reservations (bus_id, customer_name, seats_reserved, plan)
+            VALUES (?, ?, ?, ?)
+        ''', (bus_id, customer_name, seats_reserved, plan))
         
         cursor.execute('''
             UPDATE buses SET available_seats = available_seats - ?
@@ -168,13 +179,13 @@ def view_reservations(user_id, is_admin):
     
     if is_admin:
         cursor.execute('''
-            SELECT reservations.id, buses.bus_number, buses.route, reservations.customer_name, reservations.seats_reserved, buses.time, buses.price
+            SELECT reservations.id, buses.bus_number, buses.route, reservations.customer_name, reservations.seats_reserved, buses.time, buses.price, reservations.plan
             FROM reservations
             JOIN buses ON reservations.bus_id = buses.id
         ''')
     else:
         cursor.execute('''
-            SELECT reservations.id, buses.bus_number, buses.route, reservations.customer_name, reservations.seats_reserved, buses.time, buses.price
+            SELECT reservations.id, buses.bus_number, buses.route, reservations.customer_name, reservations.seats_reserved, buses.time, buses.price, reservations.plan
             FROM reservations
             JOIN buses ON reservations.bus_id = buses.id
             WHERE reservations.customer_name = (SELECT username FROM users WHERE id = ?)
