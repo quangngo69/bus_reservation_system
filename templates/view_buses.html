@@ -5,6 +5,15 @@
 {% block content %}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='viewbus.css') }}">
 <div class="container">
+    <form method="POST" action="{{ url_for('view_buses_route') }}">
+        <input type="text" id="search_query" name="search_query" placeholder="Search by route" onkeyup="autocomplete()">
+        <div id="suggestions"></div>
+        <button type="submit">Search</button>
+    </form>
+    <div class="sort-options">
+        <a href="{{ url_for('view_buses_route', sort_by='time') }}">Sort by Time</a>
+        <a href="{{ url_for('view_buses_route', sort_by='bus_number') }}">Sort by Bus Number</a>
+    </div>
     {% for bus in buses %}
     <div class="bus-container">
         <img src="{{ url_for('static', filename='images/bus_image.jpg') }}" alt="Bus Image" class="bus-image">
@@ -22,4 +31,24 @@
     </div>
     {% endfor %}
 </div>
+<script>
+    function autocomplete() {
+        const query = document.getElementById('search_query').value;
+        fetch(`/autocomplete?query=${query}`)
+            .then(response => response.json())
+            .then(data => {
+                const suggestions = document.getElementById('suggestions');
+                suggestions.innerHTML = '';
+                data.forEach(item => {
+                    const div = document.createElement('div');
+                    div.innerHTML = item;
+                    div.onclick = () => {
+                        document.getElementById('search_query').value = item;
+                        suggestions.innerHTML = '';
+                    };
+                    suggestions.appendChild(div);
+                });
+            });
+    }
+</script>
 {% endblock %}
