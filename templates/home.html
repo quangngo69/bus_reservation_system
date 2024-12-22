@@ -5,7 +5,7 @@
 {% block content %}
 <div class="container">
     {% if user %}
-        <img src="{{ url_for('static', filename='images/home_image.jpg') }}" alt="Home Image" class="home-image">
+        <img src="{{ url_for('static', filename='images/home_image2.jpg') }}" alt="Home Image" class="home-image">
     {% else %}
         <h2>Welcome to the Bus Reservation System</h2>
         <p><a href="{{ url_for('login') }}">Login</a> or <a href="{{ url_for('register') }}">Register</a></p>

@@ -42,13 +42,14 @@ body {
 }
 
 .button {
-    padding: 10px;
+    padding: 15px;
     background-color: #4CAF50; /* Green background */
     color: white; /* White text */
     border: none; /* No border */
     border-radius: 4px; /* Rounded corners */
     cursor: pointer; /* Pointer cursor on hover */
     font-size: 16px; /* Font size */
+    margin-right: 10px;
     text-align: center;
     text-decoration: none; /* Remove underline */
     display: inline-block;
