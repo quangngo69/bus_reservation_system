@@ -42,7 +42,7 @@ def index():
         user = UserDAO.get_user_by_id(user_id)
         if user:
             balance = user[6]
-    return render_template('index.html', user=user, balance = balance)
+    return render_template('index.html', user=user, balance=balance)
 
 # Route for adding a bus
 @app.route('/add_bus', methods=['GET', 'POST'])

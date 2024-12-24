@@ -29,18 +29,18 @@
                 <td>{{ reservation[5] }}</td>
                 <td>
                     {% if reservation[7] == 'block' %}
-                        $150
+                        VND 150
                     {% else %}
-                        ${{ reservation[4] * reservation[6] }}
+                        VND {{ reservation[4] * reservation[6] }}
                     {% endif %}
                 </td>
                 <td>
-                    <img src="{{ url_for('generate_qr_code', bus_id=reservation[0], customer_name=reservation[3], seats_reserved=reservation[4]) }}" alt="QR Code" width="100" height="100">
+                    <img src="{{ url_for('generate_qr_code', bus_id=reservation[0], customer_name=reservation[3], seats_reserved=reservation[4]) }}" alt="QR Code" width="200" height="200">
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-    <a href="{{ url_for('home') }}">Back to Home</a>
+    <a href="{{ url_for('home') }}" class="buttonBack">Back to Home</a>
 </div>
 {% endblock %}

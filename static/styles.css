@@ -15,8 +15,8 @@ body {
     display: flex;
     align-items: center;
     padding: 10px;
-    background-color: #dedef1b9; /* Light background for the header */
-    border-bottom: 1px solid #1c90b7b6; /* Border for the header */
+    width: 100%;
+    background-color: #4CAF50; /* Light background for the header */
 }
 
 .logo {
@@ -31,8 +31,9 @@ body {
 }
 
 .welcome-message {
-    font-size: 14px; /* Small characters */
-    color: #555; /* Slightly lighter gray */
+    font-size: 18px; /* Small characters */
+    font-weight: bold;
+    color: white; /* Slightly lighter gray */
     margin-left: 20px; /* Space between logo and welcome message */
 }
 
@@ -42,22 +43,94 @@ body {
 }
 
 .button {
-    padding: 15px;
+    padding: 10px;
     background-color: #4CAF50; /* Green background */
     color: white; /* White text */
-    border: none; /* No border */
-    border-radius: 4px; /* Rounded corners */
+    border: none; 
+    border-color: white;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
     cursor: pointer; /* Pointer cursor on hover */
     font-size: 16px; /* Font size */
+    font-weight: bold;
     margin-right: 10px;
     text-align: center;
     text-decoration: none; /* Remove underline */
     display: inline-block;
+    box-sizing: border-box;
 }
 
 .button:hover {
+    background-color: #45a049; 
+    border-bottom: 4px solid white;
+}
+
+.button2 {
+    padding: 10px;
+    background-color: #4CAF50; /* Green background */
+    color: white; /* White text */
+    border: none; 
+    border-color: white;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 14px; /* Font size */
+    font-weight: bold;
+    margin-right: 10px;
+    text-align: center;
+    text-decoration: none; /* Remove underline */
+    display: inline-block;
+    box-sizing: border-box;
+}
+
+.button2:hover {
     background-color: #45a049; /* Darker green on hover */
 }
+
+.buttonBack {
+    padding: 10px;
+    background-color: white; /* Green background */
+    color: black; /* White text */
+    border: none; 
+    border-color: white;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 14px; /* Font size */
+    font-weight: bold;
+    margin-right: 10px;
+    text-align: center;
+    text-decoration: none; /* Remove underline */
+    display: inline-block;
+    box-sizing: border-box;
+}
+
+.buttonBack:hover {
+    background-color: #C4C4C4;
+}
+
+.buttonRed {
+    padding: 10px;
+    background-color: #cc1e1e; /* Green background */
+    color: white; /* White text */
+    border: none; 
+    border-color: white;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 14px; /* Font size */
+    font-weight: bold;
+    margin-right: 10px;
+    text-align: center;
+    text-decoration: none; /* Remove underline */
+    display: inline-block;
+    box-sizing: border-box;
+}
+
+.buttonRed:hover {
+    background-color: #d65454;
+}
+
 
 .content {
     padding: 20px;

@@ -27,19 +27,19 @@
                         <input type="hidden" name="user_id" value="{{ user[0] }}">
                         <input type="hidden" name="action" value="update_balance">
                         <input type="number" name="amount" placeholder="Amount" required>
-                        <button type="submit">Update Balance</button>
+                        <button type="submit" class="button2">Update Balance</button>
                     </form>
                     <form action="{{ url_for('manage_accounts') }}" method="POST" style="display:inline;">
                         <input type="hidden" name="user_id" value="{{ user[0] }}">
                         <input type="hidden" name="action" value="update_password">
                         <input type="password" name="new_password" placeholder="New Password" required>
-                        <button type="submit">Update Password</button>
+                        <button type="submit" class="button2">Update Password</button>
                     </form>
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-    <a href="{{ url_for('home') }}">Back to Home</a>
+    <a href="{{ url_for('home') }}" class="buttonBack">Back to Home</a>
 </div>
 {% endblock %}

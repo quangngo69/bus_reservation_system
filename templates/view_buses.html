@@ -5,31 +5,47 @@
 {% block content %}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='viewbus.css') }}">
 <div class="container">
-    <form method="POST" action="{{ url_for('view_buses_route') }}">
-        <input type="text" id="search_query" name="search_query" placeholder="Search by route" onkeyup="autocomplete()">
-        <div id="suggestions"></div>
-        <button type="submit">Search</button>
-    </form>
-    <div class="sort-options">
-        <a href="{{ url_for('view_buses_route', sort_by='time') }}">Sort by Time</a>
-        <a href="{{ url_for('view_buses_route', sort_by='bus_number') }}">Sort by Bus Number</a>
-    </div>
-    {% for bus in buses %}
-    <div class="bus-container">
-        <img src="{{ url_for('static', filename='images/bus_image.jpg') }}" alt="Bus Image" class="bus-image">
-        <div class="bus-info">
-            <p><strong>Bus Number:</strong> {{ bus[1] }}</p>
-            <p><strong>Route:</strong> {{ bus[2] }}</p>
-            <p><strong>Available Seats:</strong> {{ bus[4] }}</p>
-            <p><strong>Time:</strong> {{ bus[5] }}</p>
-            <p><strong>Price:</strong> ${{ bus[6] }}</p>
+    <!-- Search and Sort Section -->
+    <div class="search-sort-container">
+        <!-- Search Form -->
+        <form method="POST" action="{{ url_for('view_buses_route') }}" class="controls">
+            <input type="text" id="search_query" name="search_query" placeholder="Search by route" onkeyup="autocomplete()">
+            <div id="suggestions"></div>
+            <button type="submit" class="buttonBack">Search</button>
+        </form>
+
+        <!-- Sort Buttons -->
+        <div class="sort-options">
+            <a href="{{ url_for('view_buses_route', sort_by='time') }}" class="button2">Sort by Time</a>
+            <a href="{{ url_for('view_buses_route', sort_by='bus_number') }}" class="button2">Sort by Bus Number</a>
         </div>
-        <a href="{{ url_for('buy_ticket', bus_id=bus[0]) }}" class="button">Buy Ticket</a>
-        {% if user[1] == 'admin' %}
-        <a href="{{ url_for('edit_bus', bus_id=bus[0]) }}" class="button">Edit</a>
-        {% endif %}
     </div>
-    {% endfor %}
+
+    <!-- Bus Containers -->
+    <div class="buses-container">
+        {% for bus in buses %}
+        <div class="bus-container">
+            <!-- Bus Image and Number Overlay -->
+            <div class="bus-image">
+                <img src="{{ url_for('static', filename='images/bus_image.jpg') }}" alt="Bus Image">
+                <div class="text-overlay">{{ bus[1] }}</div> <!-- Bus Number on image -->
+            </div>
+
+            <div class="bus-info">
+                <p><strong>Bus Number:</strong> {{ bus[1] }}</p>
+                <p><strong>Route:</strong> {{ bus[2] }}</p>
+                <p><strong>Available Seats:</strong> {{ bus[4] }}</p>
+                <p><strong>Time:</strong> {{ bus[5] }}</p>
+                <p><strong>Price:</strong> VND {{ bus[6] }}</p>
+            </div>
+
+            <a href="{{ url_for('buy_ticket', bus_id=bus[0]) }}" class="button2">Buy Ticket</a>
+            {% if user[1] == 'admin' %}
+            <a href="{{ url_for('edit_bus', bus_id=bus[0]) }}" class="button2">Edit</a>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
 </div>
 <script>
     function autocomplete() {

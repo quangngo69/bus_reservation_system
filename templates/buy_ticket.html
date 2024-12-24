@@ -8,7 +8,7 @@
 <body>
     <div class="container">
         <h1>Buy Ticket for Bus {{ bus[1] }}</h1>
-        <p>Price per seat: ${{ bus[6] }}</p> <!-- Display the price per seat -->
+        <p>Price per seat: VND {{ bus[6] }}</p> <!-- Display the price per seat -->
         <form action="{{ url_for('buy_ticket', bus_id=bus[0]) }}" method="POST">
             <label for="customer_name">Customer Name:</label>
             <input type="text" id="customer_name" name="customer_name" value="{{ user[7] }}" required>
@@ -19,12 +19,12 @@
             <label for="plan">Plan:</label>
             <select id="plan" name="plan" required>
                 <option value="one_time">One time</option>
-                <option value="block">1 block (~60 tickets) - $150</option>
+                <option value="block">1 block (~60 tickets) - VND 150</option>
             </select>
             
-            <button type="submit">Buy Ticket</button>
+            <button type="submit" class="button2">Buy Ticket</button>
         </form>
-        <a href="{{ url_for('view_buses_route') }}">Back to View Buses</a>
+        <a href="{{ url_for('view_buses_route') }}" class="buttonBack">Back to View Buses</a>
     </div>
 </body>
 </html>
