@@ -37,6 +37,44 @@ body {
     margin-left: 20px; /* Space between logo and welcome message */
 }
 
+.form-row {
+    display: flex; /* Use flexbox for alignment */
+    align-items: center; /* Vertically align label and input */
+    margin-bottom: 15px; /* Add space between rows */
+    width: 500px;
+}
+
+/* Fixed width for the search input */
+.input {
+    width: 150px; 
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+    outline: none;
+}
+
+.input:focus {
+    border-color: #45a049; 
+    box-shadow: 0 0 5px rgba(69, 160, 73, 0.5); 
+}
+
+.input2 {
+    width: 172  px; 
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+    outline: none;
+}
+
+.input2:focus {
+    border-color: #45a049; 
+    box-shadow: 0 0 5px rgba(69, 160, 73, 0.5); 
+}
+
 .button-container {
     display: flex;
     gap: 10px; /* Space between buttons */
@@ -71,8 +109,9 @@ body {
     color: white; /* White text */
     border: none; 
     border-color: white;
-    border-top: 4px solid transparent;
-    border-bottom: 4px solid transparent;
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+    border-radius: 4px;
     cursor: pointer; /* Pointer cursor on hover */
     font-size: 14px; /* Font size */
     font-weight: bold;
@@ -93,8 +132,9 @@ body {
     color: black; /* White text */
     border: none; 
     border-color: white;
-    border-top: 4px solid transparent;
-    border-bottom: 4px solid transparent;
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+    border-radius: 4px;
     cursor: pointer; /* Pointer cursor on hover */
     font-size: 14px; /* Font size */
     font-weight: bold;
@@ -115,8 +155,9 @@ body {
     color: white; /* White text */
     border: none; 
     border-color: white;
-    border-top: 4px solid transparent;
-    border-bottom: 4px solid transparent;
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+    border-radius: 4px;
     cursor: pointer; /* Pointer cursor on hover */
     font-size: 14px; /* Font size */
     font-weight: bold;
@@ -135,6 +176,16 @@ body {
 .content {
     padding: 20px;
 }
+
+.label2 {
+    font-size: 16px; /* Adjust font size */
+    font-weight: bold; /* Make text bold */
+    color: #333; /* Text color */
+    width: 150px; /* Fixed width to align inputs */
+    text-align: left ; /* Right-align the label */
+    margin-right: 10px; /* Add space between label and input */
+}
+
 
 .home-image {
     width: 100%;

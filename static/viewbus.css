@@ -130,6 +130,7 @@ body {
     border-color: white;
     border-top: 4px solid transparent;
     border-bottom: 4px solid transparent;
+    border-radius: 4px;
     cursor: pointer; /* Pointer cursor on hover */
     font-size: 14px; /* Font size */
     font-weight: bold;
@@ -148,6 +149,75 @@ body {
 
 .delete-button {
     background-color: #e74c3c; /* Red background */
+}
+
+select {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    cursor: pointer;
+}
+
+select:focus {
+    outline: none;
+    border-color: #4CAF50; /* Optional green focus color */
+}
+
+/* General Dropdown Styling */
+.custom-dropdown {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    background-color: white;
+    color: #333;
+    cursor: pointer;
+    appearance: none; /* Remove default arrow in some browsers */
+}
+
+/* Dropdown Focus Styling */
+.custom-dropdown:focus {
+    outline: none;
+    border-color: #4CAF50; /* Optional green focus color */
+}
+
+/* Dropdown Option Styling */
+.custom-dropdown option {
+    padding: 8px;
+    background-color: white;
+    color: #333;
+}
+
+/* Hover Effect for Options */
+.custom-dropdown option:hover {
+    background-color: #45a049; /* Green color on hover */
+    color: white; /* White text for contrast */
+}
+
+.label {
+    font-size: 16px; /* Adjust font size */
+    font-weight: bold; /* Make text bold */
+    color: #333; /* Text color */
+    margin-right: 10px; /* Add space between the label and the dropdown */
+    display: inline-block; /* Align properly with the dropdown */
+    vertical-align: middle; /* Align vertically with the dropdown */
+}
+
+/* Fixed width for the search input */
+.input1 {
+    width: 800px; 
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+    outline: none;
+}
+
+.input1:focus {
+    border-color: #45a049; 
+    box-shadow: 0 0 5px rgba(69, 160, 73, 0.5); 
 }
 
 .delete-button:hover {
