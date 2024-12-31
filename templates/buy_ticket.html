@@ -10,19 +10,27 @@
         <h1>Buy Ticket for Bus {{ bus[1] }}</h1>
         <p>Price per seat: VND {{ bus[6] }}</p> <!-- Display the price per seat -->
         <form action="{{ url_for('buy_ticket', bus_id=bus[0]) }}" method="POST">
-            <label for="customer_name">Customer Name:</label>
-            <input type="text" id="customer_name" name="customer_name" value="{{ user[7] }}" required>
-            
-            <label for="seats_reserved">Seats Reserved:</label>
-            <input type="number" id="seats_reserved" name="seats_reserved" required>
-            
-            <label for="plan">Plan:</label>
-            <select id="plan" name="plan" required>
-                <option value="one_time">One time</option>
-                <option value="block">1 block (~60 tickets) - VND 150</option>
-            </select>
-            
-            <button type="submit" class="button2">Buy Ticket</button>
+            <div class="form-row">
+                <label for="customer_name" class="label2">Customer Name:</label>
+                <input type="text" id="customer_name" class="input" name="customer_name" value="{{ user[7] }}" required>
+            </div>
+
+            <div class="form-row">
+                <label for="seats_reserved" class="label2">Seats Reserved:</label>
+                <input type="number" id="seats_reserved" class="input" name="seats_reserved" required>
+            </div>
+
+            <div class="form-row">
+                <label for="plan" class="label2">Plan:</label>
+                <select id="plan" name="plan" class="input2" required>
+                    <option value="one_time">One time</option>
+                    <option value="block">1 block (~60 tickets) - VND 150</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <button type="submit" class="button2">Buy Ticket</button>
+            </div>
         </form>
         <a href="{{ url_for('view_buses_route') }}" class="buttonBack">Back to View Buses</a>
     </div>

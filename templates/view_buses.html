@@ -9,16 +9,20 @@
     <div class="search-sort-container">
         <!-- Search Form -->
         <form method="POST" action="{{ url_for('view_buses_route') }}" class="controls">
-            <input type="text" id="search_query" name="search_query" placeholder="Search by route" onkeyup="autocomplete()">
+            <input type="text" id="search_query" name="search_query" placeholder="Search by route" class="input1" onkeyup="autocomplete()">
             <div id="suggestions"></div>
             <button type="submit" class="buttonBack">Search</button>
         </form>
 
         <!-- Sort Buttons -->
-        <div class="sort-options">
-            <a href="{{ url_for('view_buses_route', sort_by='time') }}" class="button2">Sort by Time</a>
-            <a href="{{ url_for('view_buses_route', sort_by='bus_number') }}" class="button2">Sort by Bus Number</a>
-        </div>
+        <form method="GET" action="{{ url_for('view_buses_route') }}" class="controls">
+            <label for="sort_by" class="label">Sort by:</label>
+            <select id="sort_by" name="sort_by" class="custom-dropdown" onchange="this.form.submit()">
+                <option value="" disabled {% if not sort_by %}selected{% endif %}>Select an option</option>
+                <option value="time" {% if sort_by == 'time' %}selected{% endif %}>Time</option>
+                <option value="bus_number" {% if sort_by == 'bus_number' %}selected{% endif %}>Bus Number</option>
+            </select>
+        </form>
     </div>
 
     <!-- Bus Containers -->

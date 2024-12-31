@@ -79,7 +79,7 @@ def view_buses_route():
     
     buses = BusDAO.view_buses(sort_by=sort_by, search_query=search_query)
     balance = user[6]
-    return render_template('view_buses.html', buses=buses, user=user, balance=balance)
+    return render_template('view_buses.html', sort_by=sort_by,buses=buses, user=user, balance=balance)
 
 # Route for viewing reservations
 @app.route('/view_reservations')
